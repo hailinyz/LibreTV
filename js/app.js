@@ -480,7 +480,21 @@ function removeCustomApi(index) {
     showToast('已移除自定义API: ' + apiName, 'info');
 }
 
+function toggleSettings(e) {
+    const settingsPanel = document.getElementById('settingsPanel');
+    if (!settingsPanel) return;
 
+    if (settingsPanel.classList.contains('show')) {
+        settingsPanel.classList.remove('show');
+    } else {
+        settingsPanel.classList.add('show');
+    }
+
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+}
 
 // 设置事件监听器
 function setupEventListeners() {
@@ -491,8 +505,18 @@ function setupEventListeners() {
         }
     });
 
-    // 点击外部关闭历史记录面板
+    // 点击外部关闭设置面板和历史记录面板
     document.addEventListener('click', function (e) {
+        // 关闭设置面板
+        const settingsPanel = document.querySelector('#settingsPanel.show');
+        const settingsButton = document.querySelector('#settingsPanel .close-btn');
+
+        if (settingsPanel && settingsButton &&
+            !settingsPanel.contains(e.target) &&
+            !settingsButton.contains(e.target)) {
+            settingsPanel.classList.remove('show');
+        }
+
         // 关闭历史记录面板
         const historyPanel = document.querySelector('#historyPanel.show');
         const historyButton = document.querySelector('#historyPanel .close-btn');
@@ -504,7 +528,34 @@ function setupEventListeners() {
         }
     });
 
+    // 黄色内容过滤开关事件绑定
+    const yellowFilterToggle = document.getElementById('yellowFilterToggle');
+    if (yellowFilterToggle) {
+        yellowFilterToggle.addEventListener('change', function (e) {
+            localStorage.setItem('yellowFilterEnabled', e.target.checked);
 
+            // 控制黄色内容接口的显示状态
+            const adultdiv = document.getElementById('adultdiv');
+            if (adultdiv) {
+                if (e.target.checked === true) {
+                    adultdiv.style.display = 'none';
+                } else if (e.target.checked === false) {
+                    adultdiv.style.display = ''
+                }
+            } else {
+                // 添加成人API列表
+                addAdultAPI();
+            }
+        });
+    }
+
+    // 广告过滤开关事件绑定
+    const adFilterToggle = document.getElementById('adFilterToggle');
+    if (adFilterToggle) {
+        adFilterToggle.addEventListener('change', function (e) {
+            localStorage.setItem(PLAYER_CONFIG.adFilteringStorage, e.target.checked);
+        });
+    }
 }
 
 // 重置搜索区域
@@ -1311,3 +1362,59 @@ if (typeof initDouban === 'function') {
         initDouban();
     }, 100);
 }
+
+// 初始化设置面板
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化API复选框
+    if (typeof initAPICheckboxes === 'function') {
+        initAPICheckboxes();
+    }
+    
+    // 初始化自定义API列表
+    if (typeof renderCustomAPIsList === 'function') {
+        renderCustomAPIsList();
+    }
+    
+    // 设置开关的初始状态
+    const yellowFilterToggle = document.getElementById('yellowFilterToggle');
+    if (yellowFilterToggle) {
+        const isEnabled = localStorage.getItem('yellowFilterEnabled') === 'true';
+        yellowFilterToggle.checked = isEnabled;
+        
+        // 设置开关外观
+        const toggleBg = yellowFilterToggle.nextElementSibling;
+        const toggleDot = toggleBg.nextElementSibling;
+        if (isEnabled) {
+            toggleBg.classList.add('bg-pink-600');
+            toggleDot.classList.add('translate-x-6');
+        }
+    }
+    
+    const adFilterToggle = document.getElementById('adFilterToggle');
+    if (adFilterToggle) {
+        const isEnabled = localStorage.getItem(PLAYER_CONFIG.adFilteringStorage) === 'true';
+        adFilterToggle.checked = isEnabled;
+        
+        // 设置开关外观
+        const toggleBg = adFilterToggle.nextElementSibling;
+        const toggleDot = toggleBg.nextElementSibling;
+        if (isEnabled) {
+            toggleBg.classList.add('bg-pink-600');
+            toggleDot.classList.add('translate-x-6');
+        }
+    }
+    
+    const doubanToggle = document.getElementById('doubanToggle');
+    if (doubanToggle) {
+        const isEnabled = localStorage.getItem('doubanEnabled') === 'true';
+        doubanToggle.checked = isEnabled;
+        
+        // 设置开关外观
+        const toggleBg = doubanToggle.nextElementSibling;
+        const toggleDot = toggleBg.nextElementSibling;
+        if (isEnabled) {
+            toggleBg.classList.add('bg-pink-600');
+            toggleDot.classList.add('translate-x-6');
+        }
+    }
+});
