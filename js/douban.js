@@ -55,7 +55,12 @@ const doubanPageSize = 16; // 一次显示的项目数量
 
 // 初始化豆瓣功能
 function initDouban() {
-    // 设置豆瓣开关的初始状态
+    // 默认启用豆瓣功能
+    if (localStorage.getItem('doubanEnabled') === null) {
+        localStorage.setItem('doubanEnabled', 'true');
+    }
+    
+    // 设置豆瓣开关的初始状态（如果存在）
     const doubanToggle = document.getElementById('doubanToggle');
     if (doubanToggle) {
         const isEnabled = localStorage.getItem('doubanEnabled') === 'true';
@@ -86,12 +91,6 @@ function initDouban() {
             // 更新显示状态
             updateDoubanVisibility();
         });
-        
-        // 初始更新显示状态
-        updateDoubanVisibility();
-
-        // 滚动到页面顶部
-        window.scrollTo(0, 0);
     }
 
     // 加载用户标签
@@ -105,6 +104,9 @@ function initDouban() {
     
     // 换一批按钮事件监听
     setupDoubanRefreshBtn();
+    
+    // 初始更新显示状态
+    updateDoubanVisibility();
     
     // 初始加载热门内容
     if (localStorage.getItem('doubanEnabled') === 'true') {
@@ -121,7 +123,7 @@ function updateDoubanVisibility() {
     const isSearching = document.getElementById('resultsArea') && 
         !document.getElementById('resultsArea').classList.contains('hidden');
     
-    // 只有在启用且没有搜索结果显示时才显示豆瓣区域
+    // 默认启用豆瓣功能，只有在明确禁用或正在搜索时才隐藏
     if (isEnabled && !isSearching) {
         doubanArea.classList.remove('hidden');
         // 如果豆瓣结果为空，重新加载
