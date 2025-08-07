@@ -174,11 +174,8 @@ function hidePasswordModal() {
 
         passwordModal.style.display = 'none';
 
-        // 如果启用豆瓣区域则显示豆瓣区域
-        if (localStorage.getItem('doubanEnabled') === 'true') {
-            document.getElementById('doubanArea').classList.remove('hidden');
-            initDouban();
-        }
+        // 注意：这里不显示豆瓣区域，因为主要内容仍然被隐藏
+        // 只有在密码验证成功后才会显示主要内容
     }
 }
 
@@ -211,6 +208,12 @@ async function handlePasswordSubmit() {
     if (await verifyPassword(password)) {
         hidePasswordModal();
 
+        // 显示主要内容
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            mainContent.style.display = 'flex';
+        }
+
         // 触发密码验证成功事件
         document.dispatchEvent(new CustomEvent('passwordVerified'));
     } else {
@@ -236,6 +239,14 @@ function initPasswordProtection() {
     if (isPasswordProtected() && !isPasswordVerified()) {
         showPasswordModal();
         return;
+    }
+    
+    // 如果密码已验证，显示主要内容
+    if (isPasswordProtected() && isPasswordVerified()) {
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            mainContent.style.display = 'flex';
+        }
     }
 }
 

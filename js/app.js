@@ -59,6 +59,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 初始检查成人API选中状态
     setTimeout(checkAdultAPIsSelected, 100);
+    
+    // 监听密码验证成功事件
+    document.addEventListener('passwordVerified', function() {
+        // 密码验证成功后初始化豆瓣功能
+        if (typeof initDouban === 'function') {
+            setTimeout(() => {
+                initDouban();
+            }, 100);
+        }
+    });
 });
 
 // 初始化API复选框
@@ -1354,14 +1364,6 @@ function saveStringAsFile(content, fileName) {
 }
 
 // 移除Node.js的require语句，因为这是在浏览器环境中运行的
-
-// 初始化豆瓣功能
-if (typeof initDouban === 'function') {
-    // 延迟初始化，确保DOM完全加载
-    setTimeout(() => {
-        initDouban();
-    }, 100);
-}
 
 // 初始化设置面板
 document.addEventListener('DOMContentLoaded', function() {
