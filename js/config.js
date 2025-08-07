@@ -8,7 +8,7 @@ const MAX_HISTORY_ITEMS = 5;
 // 注意：PASSWORD 环境变量是必需的，所有部署都必须设置密码以确保安全
 const PASSWORD_CONFIG = {
     localStorageKey: 'passwordVerified',  // 存储验证状态的键名
-    verificationTTL: 0  // 验证有效期（0表示每次都需要密码）
+    verificationTTL: 90 * 24 * 60 * 60 * 1000  // 验证有效期（90天，约3个月）
 };
 
 // 网站信息配置
