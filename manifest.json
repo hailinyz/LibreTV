@@ -10,9 +10,9 @@
     "apple-mobile-web-app-status-bar-style": "black",
     "icons": [
       {
-        "src": "image/logo-black.png",
-        "sizes": "512x512",
-        "type": "image/png"
+        "src": "image/logo.svg",
+        "sizes": "any",
+        "type": "image/svg+xml"
       }
     ]
   }
