@@ -216,6 +216,13 @@ async function handlePasswordSubmit() {
 
         // 触发密码验证成功事件
         document.dispatchEvent(new CustomEvent('passwordVerified'));
+        
+        // 确保豆瓣内容显示
+        setTimeout(() => {
+            if (typeof updateDoubanVisibility === 'function') {
+                updateDoubanVisibility();
+            }
+        }, 200);
     } else {
         showPasswordError();
         if (passwordInput) {
@@ -247,6 +254,13 @@ function initPasswordProtection() {
         if (mainContent) {
             mainContent.style.display = 'flex';
         }
+        
+        // 确保豆瓣内容显示
+        setTimeout(() => {
+            if (typeof updateDoubanVisibility === 'function') {
+                updateDoubanVisibility();
+            }
+        }, 200);
     }
 }
 

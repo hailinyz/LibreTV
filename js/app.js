@@ -66,6 +66,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (typeof initDouban === 'function') {
             setTimeout(() => {
                 initDouban();
+                // 确保豆瓣内容显示
+                if (typeof updateDoubanVisibility === 'function') {
+                    updateDoubanVisibility();
+                }
             }, 100);
         }
     });
